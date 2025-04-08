@@ -1,6 +1,3 @@
-Sure! Below is the markdown version of your process with a description and steps maintained:
-
-```markdown
 # Dockerizing and Automating Deployment with Jenkins
 
 ## Objective
