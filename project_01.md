@@ -191,7 +191,7 @@ sudo apt install -y ansible
 Save and exit the file, then run the script:
 
 ```bash
-bash install_ansible.sh
+sudo bash install_ansible.sh
 ```
 
 Check Ansible installation:
