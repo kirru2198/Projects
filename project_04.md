@@ -95,6 +95,3 @@ sudo docker run -it -d -p 93:80 --name sc1 new_img
 ## Conclusion
 
 This process helps automate the building and deployment of a web application using Docker and Jenkins. The key steps involve forking the repository, creating a Dockerfile, configuring webhooks in GitHub, and setting up Jenkins jobs for building and deploying the application on various environments (test, development, production).
-```
-
-This markdown version includes a description of the entire process, step-by-step instructions, and examples of the Dockerfile and Jenkins setup. You can copy and paste this into your documentation or a markdown file for easy reference.
