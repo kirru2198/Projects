@@ -120,10 +120,6 @@ This is the overview of **Capstone Project 1**. By implementing these steps, you
 
 ---
 
-Absolutely! Let's break down the steps you've taken so far, and I'll write it up in a markdown format with descriptions for clarity. Here's how you can structure the process:
-
----
-
 # DevOps Capstone Project 1: Jenkins, Docker, Java, and Ansible Installation on AWS
 
 ## Introduction
