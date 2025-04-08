@@ -204,24 +204,44 @@ ansible --version
 
 ### Step 4: **Set Up SSH Keys for Ansible**
 
-#### 1. **Generate SSH Keys on Jenkins Master**:
-- SSH into **Jenkins M** and generate SSH keys:
+### Enable Keyless SSH Access Between Ansible Master and Slave
+To enable keyless SSH access, follow these steps:
 
+1. On the Master machine, generate an SSH key pair:
+    ```bash
+    ssh-keygen
+    ```
+    Press `Enter` to accept the default values until you reach the screen where the key pair is generated.
+
+### Step 3: Print the Public Key (id_rsa.pub)
+After generating the key pair, print the public key with the following command:
 ```bash
-ssh-keygen -t rsa -b 2048
+sudo cat ./.ssh/id_rsa.pub
 ```
 
-- This will generate a **private key** (`id_rsa`) and a **public key** (`id_rsa.pub`).
-
-#### 2. **Copy Public Key to Jenkins Slave Machines**:
-- Copy the **public key** (`id_rsa.pub`) to **Jenkins S1** and **Jenkins S2**.
-
+### Step 4: Copy the Public Key to the Slave’s `authorized_keys` File
+Copy the output from the above command and paste it into the slave machine's `authorized_keys` file. Use the following command on the slave machine:
 ```bash
-ssh-copy-id user@<slave-ip>
+sudo nano ./.ssh/authorized_keys
 ```
+Paste the public key into the second line of the file. Save and exit the editor.
+
+Now, keyless access has been configured between your Ansible Master and Slave. You can verify it by SSH-ing from your Master to your Slave and checking that the connection is successful.
 
 - Repeat the same for both **Jenkins S1** and **Jenkins S2**.
 
+###3. **Test SSH Connection:**
+
+From the Jenkins master, verify that SSH works to both slave machines using:
+
+```bash
+ssh <slave_ip>
+```
+and exit
+
+```bash
+exit
+```
 ---
 
 ### Step 5: **Configure Ansible Inventory and Hosts**
@@ -250,7 +270,16 @@ sudo nano hosts
 ```bash
 ansible all -m ping
 ```
+If successful, you should see:
 
+```bash
+<slave_ip_1> | SUCCESS => {
+    "ping": "pong"
+}
+<slave_ip_2> | SUCCESS => {
+    "ping": "pong"
+}
+```
 - If the ping is successful for both slaves, you have correctly configured SSH and Ansible.
 
 ---
@@ -300,226 +329,7 @@ sudo apt update
 sudo apt install openjdk-21-jdk -y
 sudo apt install docker.io -y
 ```
-#### 4. **Run the Playbook**:
-- Run the playbook using Ansible:
-
-```bash
-ansible-playbook play.yml
-```
-
----
-
-### Step 7: **Verify Jenkins Installation on Master**
-
-1. After the playbook has run successfully, verify if Jenkins is installed and running on the **Jenkins S1** and **Jenkins S2** machines.
-2. Open a browser and navigate to **http://<jenkins-master-ip>:8080** to access the Jenkins Dashboard.
-3. Set up Jenkins, install necessary plugins, and configure the slaves in Jenkins Master.
-
----
-
-### Summary of Actions Taken:
-
-1. **Launched EC2 Instances**: Created 3 AWS EC2 instances (1 master and 2 slave).
-2. **System Update**: Updated all instances to ensure they are using the latest packages.
-3. **Installed Ansible**: Installed Ansible on the Jenkins Master machine to handle configuration management.
-4. **SSH Configuration**: Configured SSH keys for passwordless authentication between Jenkins Master and Slaves.
-5. **Ansible Playbook**: Created and ran an Ansible playbook to install **Jenkins**, **Java**, and **Docker** on Jenkins Slave machines.
-6. **Jenkins Verification**: Checked the Jenkins setup and ensured it was running correctly.
-
----
-
-Now, you can proceed with additional tasks such as setting up Jenkins jobs, creating Docker containers, or configuring the CI/CD pipeline.
-
----
-## **Overview:**
-
-In this process, we are using **Ansible**, a configuration management tool, to automate the installation of software across multiple machines. The goal is to install:
-- **Jenkins** and **Java** on the Ansible master machine
-- **Java** and **Docker** on the Ansible slave machines
-
----
-
-## **Steps:**
-
-### 1. **Setting Up the Machines**
-
-We will be working with three virtual machines:
-- **Jenkins Master Machine** (Ansible Master)
-- **Jenkins Slave Machine 1**
-- **Jenkins Slave Machine 2**
-
-We are using **AWS EC2** to launch these machines. 
-1. Launch three **Ubuntu 22.04** instances.
-2. Name them as:
-   - `Jenkins M` (Master)
-   - `Jenkins S1` (Slave 1)
-   - `Jenkins S2` (Slave 2)
-
-Ensure that the key pair is selected for SSH access and the security group is set to allow all traffic.
-
-### 2. **Update the Machines**
-
-Once the machines are launched, update them with the following command on each machine:
-
-```bash
-sudo apt-get update
-```
-
-### 3. **Install Ansible on Jenkins Master Machine**
-
-On the **Jenkins Master Machine**, Ansible is installed to manage the installation of software on both the master and slave machines.
-
-1. **Install Ansible on Jenkins Master:**
-
-```bash
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt-get install ansible
-```
-
-2. **Verify Ansible Installation:**
-
-```bash
-ansible --version
-```
-
-### 4. **Configure SSH Access**
-
-For Ansible to manage remote machines, we need to configure SSH access between the master and slave machines.
-
-1. **Generate SSH Keys** on the Jenkins Master:
-
-```bash
-ssh-keygen -t rsa -b 2048
-```
-
-2. **Copy Public Key to Slave Machines:**
-
-On each slave machine (`Jenkins S1` and `Jenkins S2`), append the master’s public key to the `authorized_keys` file inside the `~/.ssh/` directory.
-
-3. **Test SSH Connection:**
-
-From the Jenkins master, verify that SSH works to both slave machines using:
-
-```bash
-ssh <slave_ip>
-```
-
-### 5. **Configure the Ansible Inventory File**
-
-Next, configure the **Ansible inventory file** to specify which machines Ansible will manage. 
-This file is located at `/etc/ansible/hosts`.
-
-1. Open the file and add the IP addresses of the slave machines:
-
-```bash
-sudo nano /etc/ansible/hosts
-```
-
-```ini
-[slaves]
-<slave_ip_1>
-<slave_ip_2>
-```
-
-2. Save and exit the file.
-
-### 6. **Test Ansible Connection**
-
-Verify that the master machine can communicate with the slave machines using Ansible’s ping module:
-
-```bash
-ansible all -m ping
-```
-
-If successful, you should see:
-
-```bash
-<slave_ip_1> | SUCCESS => {
-    "ping": "pong"
-}
-<slave_ip_2> | SUCCESS => {
-    "ping": "pong"
-}
-```
-
----
-
-### **Creating the Playbooks**
-
-Next, we need to create **Ansible playbooks** to automate the installation of **Jenkins**, **Java**, and **Docker** on the respective machines.
-
-#### 7. **Create the Ansible Playbook for Jenkins Master**
-
-Create a playbook file `play.yaml`:
-
-```bash
-sudo nano play.yaml
-```
-
-Add the following content:
-
-```yaml
----
-- name: Installing Java and Jenkins on Ansible Master Machine
-  hosts: localhost
-  become: true
-  tasks:
-    - name: Install Java
-      apt:
-        name: openjdk-11-jdk
-        state: present
-    - name: Add Jenkins Repository
-      apt_repository:
-        repo: 'deb http://pkg.jenkins.io/debian/ stable main'
-        state: present
-    - name: Install Jenkins
-      apt:
-        name: jenkins
-        state: present
-    - name: Start Jenkins service
-      service:
-        name: jenkins
-        state: started
-        enabled: true
-```
-
-This playbook will:
-1. Install **Java 11** on the master machine.
-2. Add the **Jenkins repository** and install **Jenkins**.
-3. Start the Jenkins service.
-
-#### 8. **Create the Ansible Playbook for Jenkins Slaves**
-
-Create a playbook for installing **Java** and **Docker** on the slave machines:
-
-```yaml
----
-- name: Installing Java and Docker on Jenkins Slave Machines
-  hosts: all
-  become: true
-  tasks:
-    - name: Install Java
-      apt:
-        name: openjdk-17-jdk
-        state: present
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: true
-```
-
-This playbook will:
-1. Install **Java 17** on the slave machines.
-2. Install **Docker** on the slave machines.
-3. Start the **Docker service**.
-
-#### 9. **Execute the Playbook**
+#### 4. **Execute the Playbook**
 
 Before executing the playbook, we need to ensure the commands are correct and then run them.
 
@@ -537,7 +347,7 @@ ansible-playbook -i /etc/ansible/hosts play.yaml
 
 ---
 
-### 10. **Verify Installation**
+### 5. **Verify Installation**
 
 Finally, verify that the installation was successful:
 
@@ -560,19 +370,17 @@ java -version
 docker --version
 ```
 
-If everything is configured correctly, you should see the versions of **Java**, **Jenkins**, and **Docker** printed.
+---
+
+### Step 7: **Verify Jenkins Installation on Master**
+
+1. After the playbook has run successfully, verify if Jenkins is installed and running on the **Jenkins S1** and **Jenkins S2** machines.
+2. Open a browser and navigate to **http://<jenkins-master-ip>:8080** to access the Jenkins Dashboard.
+3. Set up Jenkins, install necessary plugins, and configure the slaves in Jenkins Master.
 
 ---
 
-## **Conclusion:**
+Now, you can proceed with additional tasks such as setting up Jenkins jobs, creating Docker containers, or configuring the CI/CD pipeline.
 
-This process automates the installation of **Jenkins**, **Java**, and **Docker** across multiple machines using **Ansible**. The Ansible master controls the configuration and installation of software on both the master and slave machines, ensuring consistency and efficiency in managing the infrastructure.
 
-### **Key Points:**
-- **Ansible** is used as the configuration management tool to install software on multiple machines.
-- **SSH** is configured to allow communication between the master and slave machines.
-- **Playbooks** are used to automate the installation of software (Jenkins, Java, Docker).
-- The **inventory file** is essential to manage and target the correct machines for software installation.
-
---- 
 
