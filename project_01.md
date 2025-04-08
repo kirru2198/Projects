@@ -10,7 +10,7 @@ In today's session, we will be discussing the **DevOps Capstone Project 1**. The
 
 The company has hired us as **Senior DevOps Engineers** to implement the **DevOps lifecycle** as quickly as possible. The product’s code is hosted on a repository, and we need to deploy it efficiently.
 
-1. **Code Repository**: All the code that the company has developed is stored in the repository (the link to this repository is provided in the problem set).
+1. **Code Repository**: All the code that the company has developed is stored in the repository (the link to this repository is provided in the problem set). https://github.com/hshar/website
 2. **Objective**: We need to focus on deploying the product using the DevOps lifecycle.
   
 ---
