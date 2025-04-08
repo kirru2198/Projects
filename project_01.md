@@ -120,4 +120,3 @@ This is the overview of **Capstone Project 1**. By implementing these steps, you
 
 ---
 
-Is everyone clear with the tasks and steps involved? Please let me know if you have any questions.
