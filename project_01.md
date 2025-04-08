@@ -261,41 +261,50 @@ ansible all -m ping
 - Create a playbook to install **Jenkins**, **Java**, and **Docker** on the Jenkins Slave machines.
 
 ```bash
-nano install_software.yml
+nano play.yml
 ```
 
 Inside the playbook file, you can define tasks for installing Jenkins, Java, and Docker. Here’s an example playbook:
 
 ```yaml
 ---
-- name: Install Jenkins, Java, Docker
-  hosts: jenkins
+- name: Installing java and jenkins inside my ansible-master machine
+  hosts: localhost
   become: yes
   tasks:
-    - name: Install Java on Jenkins Slaves
-      apt:
-        name: openjdk-11-jdk
-        state: present
-    - name: Install Docker on Jenkins Slaves
-      apt:
-        name: docker.io
-        state: present
-    - name: Install Jenkins on Jenkins Slaves
-      apt:
-        name: jenkins
-        state: present
-    - name: Start Jenkins Service
-      service:
-        name: jenkins
-        state: started
-        enabled: yes
-```
+    - name: executing script file for installing jenkins and java 
+      script: jenkins.sh
 
-#### 2. **Run the Playbook**:
+- name: Installing java and docker inside my anisble-slaves/jenkins-slaves machine
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: executing script file for installing java and docker
+      script: slaves.sh
+```
+#### 2. **Create the file - jenkins.sh**:
+
+```bash
+sudo apt update
+sudo apt install openjdk-21-jdk -y
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins -y
+```
+#### 3. **Create the file - slaves.sh**:
+
+```bash
+sudo apt update
+sudo apt install openjdk-21-jdk -y
+sudo apt install docker.io -y
+```
+#### 4. **Run the Playbook**:
 - Run the playbook using Ansible:
 
 ```bash
-ansible-playbook install_software.yml
+ansible-playbook play.yml
 ```
 
 ---
