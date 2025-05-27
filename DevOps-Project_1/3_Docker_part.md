@@ -96,6 +96,7 @@ sudo docker run -it -d -p 93:80 --name sc1 new_img
 
 ### 6. **Handling Errors**
    - **Port Binding Error**:
+     - If you encounter an error when trying to build the job again (due to port conflicts), follow these steps:
      - When running the Docker container multiple times, an error occurred because port `93` was already bound to a running container.
      - **Solution**: A `docker rm -f` command was added to remove the previously created container before creating a new one:
        ```bash
