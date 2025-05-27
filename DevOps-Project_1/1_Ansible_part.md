@@ -204,6 +204,11 @@ ansible --version
 To enable keyless SSH access, follow these steps:
 
 1. On the Master machine, generate an SSH key pair:
+   - first go to the .ssh folder in master machine and then ls, you only see the authorized_keys. Here only we will generate the Public key and Private key:
+   - ```bash
+     cd .ssh
+     ls
+     ```
     ```bash
     ssh-keygen
     ```
