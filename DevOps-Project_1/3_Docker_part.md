@@ -102,3 +102,12 @@ sudo docker run -it -d -p 93:80 --name sc1 new_img
        sudo docker rm -f sc1
        ```
      - This ensured that the port was freed for use by the new container.
+
+---
+
+### 8. **Testing the Deployment**
+   - After making a change to the `index.html` file (e.g., adding the line `"Hello, this is project one!"`), the change was committed to the repository.
+   - The webhook detected the change, which triggered the Jenkins build automatically.
+   - The deployment was automatically updated, and visiting the public IP of the Prod server displayed the updated message on the browser.
+
+
