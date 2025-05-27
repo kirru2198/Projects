@@ -116,7 +116,7 @@ The company has hired us as **Senior DevOps Engineers** to implement the **DevOp
 
 ---
 
-# DevOps Capstone Project 1: Jenkins, Docker, Java, and Ansible Installation on AWS
+# Jenkins, Docker, Java, and Ansible Installation on AWS
 
 ## Introduction
 In this project, we will set up a CI/CD pipeline using Jenkins, Docker, and Java. The tasks will be executed through **Ansible**, a configuration management tool. The setup involves launching three AWS EC2 instances: one **Jenkins Master** machine and two **Jenkins Slave** machines. We will install necessary software like **Jenkins**, **Docker**, and **Java** using **Ansible** to automate the entire setup.
