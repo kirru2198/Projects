@@ -59,6 +59,7 @@ Now, we need to configure the nodes (Slave machines) for Jenkins. We will set up
    - **Launch method**: **Launch via SSH**
    - **Host**: Enter the private IP address of the `Slave 1` machine.
    - **Credentials**: Choose **SSH Username with private key**. Add the private key content from the `Slave 1` machine.
+   - **Host verification strategy**: choose to Non verifying.
    
 6. Click **Save** to create the node.
 
