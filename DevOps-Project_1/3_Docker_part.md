@@ -91,7 +91,14 @@ sudo docker run -it -d -p 93:80 --name sc1 new_img
 ### Step 6: Access the Application in a Browser
 
 - After deploying the container, you should be able to access the application in the browser using the designated port (e.g., `http://localhost:93`).
-  
-## Conclusion
 
-This process helps automate the building and deployment of a web application using Docker and Jenkins. The key steps involve forking the repository, creating a Dockerfile, configuring webhooks in GitHub, and setting up Jenkins jobs for building and deploying the application on various environments (test, development, production).
+--- 
+
+### 6. **Handling Errors**
+   - **Port Binding Error**:
+     - When running the Docker container multiple times, an error occurred because port `93` was already bound to a running container.
+     - **Solution**: A `docker rm -f` command was added to remove the previously created container before creating a new one:
+       ```bash
+       sudo docker rm -f sc1
+       ```
+     - This ensured that the port was freed for use by the new container.
