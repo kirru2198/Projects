@@ -254,7 +254,6 @@ sudo nano hosts
 - Add the private IPs of **Jenkins S1** and **Jenkins S2**:
 
 ```ini
-[jenkins]
 <jenkins-s1-ip>
 <jenkins-s2-ip>
 ```
@@ -302,7 +301,7 @@ Inside the playbook file, you can define tasks for installing Jenkins, Java, and
       script: jenkins.sh
 
 - name: Installing java and docker inside my anisble-slaves/jenkins-slaves machine
-  hosts: localhost
+  hosts: all
   become: yes
   tasks:
     - name: executing script file for installing java and docker
