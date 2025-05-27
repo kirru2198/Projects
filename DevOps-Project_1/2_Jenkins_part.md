@@ -76,7 +76,8 @@ After saving, the `test` node should appear in the **Available** state on the **
    - **Launch method**: **Launch via SSH**
    - **Host**: Enter the private IP address of the `Slave 2` machine.
    - **Credentials**: Choose **SSH Username with private key**. Use the same private key content from the `Slave 1` machine.
-   
+   - **Host verification strategy**: choose to Non verifying.
+
 5. Click **Save** to create the node.
 
 ### Step 6: Troubleshooting Node Launch
