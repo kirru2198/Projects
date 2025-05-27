@@ -38,6 +38,8 @@ To retrieve the Jenkins admin password:
 
 Click **Save and Finish**, and the Jenkins dashboard should now be ready.
 
+---
+
 ### Step 5: Configure Jenkins Nodes (Slave Machines)
 
 Now, we need to configure the nodes (Slave machines) for Jenkins. We will set up two nodes:
