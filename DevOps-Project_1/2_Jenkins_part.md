@@ -116,6 +116,8 @@ Now that the nodes are set up, we can create Jenkins jobs for the tasks:
      ```
    - Configure the job to deploy the app to the production server and expose it in the browser.
 
+---
+
 ### Step 8: Trigger Jobs Automatically Using Webhooks
 
 - **Set up GitHub webhook**: In the GitHub repository, configure a webhook to trigger Jenkins jobs when a push is made to the repository.
