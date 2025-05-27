@@ -116,12 +116,6 @@ The company has hired us as **Senior DevOps Engineers** to implement the **DevOp
 
 ---
 
-### Conclusion
-
-This is the overview of **Capstone Project 1**. By implementing these steps, you will be able to integrate the **DevOps lifecycle** into a product-based company, automate code deployments, and manage version control effectively.
-
----
-
 # DevOps Capstone Project 1: Jenkins, Docker, Java, and Ansible Installation on AWS
 
 ## Introduction
