@@ -83,6 +83,8 @@ After saving, the `test` node should appear in the **Available** state on the **
 - If a node does not launch properly, verify the private IP and ensure the correct SSH keys are configured for both nodes.
 - If the node fails to connect, check that the **Host Key Verification Strategy** is set to **Non-verifying** (since this disables strict host key verification).
 
+---
+
 ### Step 7: Create Jenkins Jobs
 
 Now that the nodes are set up, we can create Jenkins jobs for the tasks:
