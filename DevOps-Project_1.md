@@ -4,6 +4,8 @@
 
 In today's session, we will be discussing the **DevOps Capstone Project 1**. The task is based on implementing the **DevOps lifecycle** in a software company, which is a product-based company. The product code is stored in a repository, and we need to deploy this product. Let's walk through the steps involved in solving this problem.
 
+<img width="241" alt="image" src="https://github.com/user-attachments/assets/e25d6c75-304f-49e3-96cb-0ff3417e7644" />
+
 ---
 
 ### Problem Set
