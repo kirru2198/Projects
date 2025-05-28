@@ -40,6 +40,10 @@
 
 ### 📜 Step 4: Write Terraform Configuration - `main.tf`
 
+```bash
+sudo nano main.tf
+```
+
 #### Provider Block:
 
 ```hcl
