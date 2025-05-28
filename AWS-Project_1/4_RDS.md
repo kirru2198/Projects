@@ -1,5 +1,3 @@
----
-
 ## ✅ Creating a MySQL RDS Database in AWS
 
 ### 🔧 Configuration as per the Requirement
