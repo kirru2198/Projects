@@ -2,11 +2,9 @@
 
 ### **Session Introduction**
 
-* **Audio Check:** "Good morning, everyone. Please confirm if my audio is clear."
 * **Agenda:** We will be working on **Project 1** today.
 * **Assumption:** You are familiar with **RDS** and **EC2** services.
-* **Start Time:** We'll wait until 7:05 for others to join.
-* **Preparation:** Please read through the question while we wait. I'll share my screen so you can follow along.
+
 
 ---
 
