@@ -92,3 +92,64 @@ Got it — you just shared a detailed walkthrough of your Kubernetes + Jenkins +
 ```
 
 ---
+
+**Steps and Notes for Kubernetes Setup Using Ansible Playbook**
+
+1. **Copying Commands:**
+
+   * First, copy the initial set of commands (up to just above the dotted lines) from the source file.
+   * Paste these commands into your `km.sh` script file.
+   * Save and exit the file.
+
+2. **Creating `ks.sh` Script:**
+
+   * Create a new file named `ks.sh`.
+   * This script will first update the machine (`sudo apt update`).
+   * Then paste the same set of commands you copied for the master node into `ks.sh`.
+   * This script will be used to install Kubernetes on the slave machines.
+   * Save and exit the file.
+
+3. **Reviewing the Playbook:**
+
+   * Double-check the playbook to ensure all script filenames and hosts are correct (`localhost.sh`, `km.sh`, `ks.sh`).
+   * `localhost.sh` is for the Jenkins master machine where Java and Jenkins are installed.
+   * `km.sh` is for the Kubernetes master node.
+   * `ks.sh` is for Kubernetes slave nodes.
+
+4. **Running the Playbook:**
+
+   * Run the Ansible playbook directly (no need to check syntax separately).
+   * The playbook will install Java and Jenkins on the Jenkins master machine.
+   * Then it will install Java and Kubernetes on the Kubernetes master and slave nodes.
+   * Installation may take some time, and the playbook might appear stuck—this is normal.
+
+5. **If Playbook Gets Stuck:**
+
+   * If it hangs for too long, press `Ctrl+C`.
+   * Run the playbook again.
+   * Sometimes internet connectivity issues cause delays.
+
+6. **Important Notes:**
+
+   * Do **not** run Kubernetes commands you have from previous assignments as they may not be compatible with the Ansible playbook.
+   * A different, updated set of Kubernetes commands for the playbook will be shared later.
+   * Make sure the Jenkins installation commands include proper annotations (like `-y`) to avoid errors and skipped tasks.
+
+7. **Verifications:**
+
+   * Check the Java version installed.
+   * Check Jenkins commands and annotations in the script.
+
+8. **After Playbook Execution:**
+
+   * You will see the status `changed=1` for all machines, indicating the playbook ran successfully.
+   * However, Kubernetes cluster setup is not complete yet.
+   * You need to copy and run the remaining commands (found just below the dotted lines in the source file) **only on the Kubernetes master node** to finalize the cluster setup.
+
+9. **Next Steps:**
+
+   * The updated complete Kubernetes commands will be shared after the session.
+   * Try running the full setup again later.
+   * If you face issues, raise a support ticket for one-on-one assistance.
+
+---
