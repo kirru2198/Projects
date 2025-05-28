@@ -1,7 +1,3 @@
-Thanks for sharing this detailed explanation from your session. Here’s a **concise and clear breakdown of your DevOps capstone project** requirements and steps based on the narrative you've provided:
-
----
-
 ## 🔧 **Capstone Project Summary**
 
 ### 🎯 **Goal**:
