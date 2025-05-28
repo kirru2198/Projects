@@ -58,7 +58,7 @@ provider "aws" {
 #### Resource Blocks (3 EC2 Instances):
 
 ```hcl
-resource "aws_instance" "machine1" {
+resource "aws_instance" "machine2" {
   ami           = "ami-xxxxxxxxxxxxxx"
   instance_type = "t2.medium"
   key_name      = "virat"
@@ -67,7 +67,7 @@ resource "aws_instance" "machine1" {
   }
 }
 
-resource "aws_instance" "machine2" {
+resource "aws_instance" "machine3" {
   ami           = "ami-xxxxxxxxxxxxxx"
   instance_type = "t2.medium"
   key_name      = "virat"
@@ -76,7 +76,7 @@ resource "aws_instance" "machine2" {
   }
 }
 
-resource "aws_instance" "machine3" {
+resource "aws_instance" "machine4" {
   ami           = "ami-xxxxxxxxxxxxxx"
   instance_type = "t2.medium"
   key_name      = "virat"
