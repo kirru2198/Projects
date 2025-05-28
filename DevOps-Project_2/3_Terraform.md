@@ -53,6 +53,7 @@ provider "aws" {
   secret_key = "YOUR_SECRET_KEY"
 }
 ```
+> for creating access_key and secret_key, you need to click on your user name on the top right cornor of aws console, then go to Security credentials, scroll down the page and click on **Create access key**.
 
 #### Resource Blocks (3 EC2 Instances):
 
