@@ -1,186 +1,150 @@
-## 🔧 **Project Objective Summary**
-
-You are hired as a **DevOps Engineer** at a product-based company that:
-
-* Previously used **monolithic architecture**
-* Has experienced a **surge in user demand**
-* Uses **Docker** for containerization
-* Needs **automated deployment, scaling, and operations** using **Kubernetes**
-* Wants **zero change** in existing Docker containers
+Thanks for sharing this detailed explanation from your session. Here’s a **concise and clear breakdown of your DevOps capstone project** requirements and steps based on the narrative you've provided:
 
 ---
 
-## 🧩 **Tech Stack to Use**
+## 🔧 **Capstone Project Summary**
 
-* **GitHub**: Version control, Git workflow, webhooks
-* **Jenkins**: CI/CD automation (pipeline)
-* **Docker**: Containerization
-* **Docker Hub**: Image repository
-* **Kubernetes**: Orchestration (using YAML)
-* **Ansible (optional)**: Infrastructure configuration management
+### 🎯 **Goal**:
+
+Automate the **deployment, scaling, and operations** of an application using **GitHub, Jenkins, Docker, and Kubernetes** — without altering the existing Docker container in the testing environment.
 
 ---
 
-## ✅ **Task-by-Task Implementation Plan**
+## 📝 **Project Requirements Breakdown**
 
-### 🟩 **Task 1: GitHub Workflow**
+### **1. Git Workflow Implementation**
 
-* **Fork** the given repository.
-* Create necessary files:
+* Fork the provided GitHub repository (monolithic application).
+* Create feature branches for changes.
+* Add required files like:
 
   * `Dockerfile`
   * `deployment.yaml`
   * `service.yaml`
-  * Optional: `.jenkinsfile` or `Jenkinsfile` for pipeline
-* Enable **GitHub Webhook** to Jenkins (detect repo changes).
-* Use **feature branches**, commits, pull requests for Git workflow.
+  * `Jenkinsfile`
+* Enable **webhooks** to trigger Jenkins on code changes (especially on `master` branch).
 
 ---
 
-### 🟩 **Task 2: Jenkins Webhook Trigger**
+### **2. Jenkins CI/CD Integration**
 
-* Integrate GitHub with Jenkins via **webhooks**.
-* Configure Jenkins to:
+* Configure **webhooks** in GitHub to notify Jenkins.
+* In Jenkins:
 
-  * Trigger on `master` branch commits.
-  * Pull latest code.
-  * Execute the pipeline automatically.
+  * Use a **Pipeline project** (not freestyle).
+  * Create a `Jenkinsfile` to:
 
----
-
-### 🟩 **Task 3: Docker Containerization**
-
-* Create a **Dockerfile** that packages the app (e.g., using `index.html` or web app).
-* In Jenkins Pipeline:
-
-  * `docker build -t yourusername/appname .`
-  * `docker push yourusername/appname`
-
-> ✅ Push the built Docker image to **Docker Hub**.
+    * Detect code changes.
+    * Build the Docker image.
+    * Push image to Docker Hub.
+    * Deploy to Kubernetes using `kubectl` and `yaml` files.
 
 ---
 
-### 🟩 **Task 4: Kubernetes Deployment (2 Replicas)**
+### **3. Docker Containerization**
 
-* Use the pushed Docker image from Docker Hub in `deployment.yaml`.
+* Write a `Dockerfile` to:
 
-**deployment.yaml**
+  * Containerize the app (e.g., an `index.html` or web app).
+  * Ensure it exposes the correct port (`80` or custom as needed).
+* Build the Docker image:
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: product-deployment
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: product
-  template:
-    metadata:
-      labels:
-        app: product
-    spec:
-      containers:
-      - name: product-container
-        image: yourusername/appname:latest
-        ports:
-        - containerPort: 80
-```
+  ```sh
+  docker build -t <your-dockerhub-username>/your-image-name:tag .
+  ```
+* Push the image to Docker Hub:
 
-**service.yaml**
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: product-service
-spec:
-  type: NodePort
-  selector:
-    app: product
-  ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30080  # As mentioned in the project
-```
+  ```sh
+  docker push <your-dockerhub-username>/your-image-name:tag
+  ```
 
 ---
 
-### 🟩 **Task 5: Jenkins Pipeline Script**
+### **4. Kubernetes Deployment**
 
-* Use a **declarative Jenkinsfile** or scripted pipeline:
+* Create `deployment.yaml`:
 
-**Sample `Jenkinsfile`:**
+  * Use the image pushed to Docker Hub.
+  * Set `replicas: 2`.
+  * Include proper labels/selectors.
 
-```groovy
-pipeline {
-  agent any
-  environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
-  }
-  stages {
-    stage('Clone Repository') {
-      steps {
-        git branch: 'master', url: 'https://github.com/yourusername/repo.git'
-      }
+* Create `service.yaml`:
+
+  * Type: `NodePort`.
+  * Port: Use a specific port (e.g., `30008`) as per the requirement.
+  * Link to the deployment using labels.
+
+---
+
+### **5. Jenkins Pipeline Script**
+
+* Write a `Jenkinsfile` using **Declarative or Scripted Pipeline**.
+* Example structure:
+
+  ```groovy
+  pipeline {
+    agent any
+
+    environment {
+      DOCKER_IMAGE = "your-dockerhub-username/your-image-name:tag"
     }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t yourusername/appname .'
+    stages {
+      stage('Clone Repo') {
+        steps {
+          git 'https://github.com/your-org/your-repo.git'
+        }
       }
-    }
 
-    stage('Push to Docker Hub') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-          sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-          sh 'docker push yourusername/appname'
+      stage('Build Docker Image') {
+        steps {
+          sh 'docker build -t $DOCKER_IMAGE .'
+        }
+      }
+
+      stage('Push Image to Docker Hub') {
+        steps {
+          withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh '''
+              echo $PASSWORD | docker login -u $USERNAME --password-stdin
+              docker push $DOCKER_IMAGE
+            '''
+          }
+        }
+      }
+
+      stage('Deploy to Kubernetes') {
+        steps {
+          sh '''
+            kubectl apply -f deployment.yaml
+            kubectl apply -f service.yaml
+          '''
         }
       }
     }
-
-    stage('Deploy to Kubernetes') {
-      steps {
-        sh 'kubectl apply -f deployment.yaml'
-        sh 'kubectl apply -f service.yaml'
-      }
-    }
   }
-}
-```
+  ```
 
 ---
 
-### 🟩 **Task 6 (Optional): Ansible for Config Management**
+### **6. Key Notes**
 
-* Use **Ansible playbooks** to:
-
-  * Install Docker/Kubernetes
-  * Setup Jenkins on remote machines
-  * Pull and deploy code via Kubernetes on remote hosts
+* Use **Docker Hub credentials** securely (via Jenkins credentials).
+* Ensure `kubectl` is configured on Jenkins (or use a Kubernetes agent).
+* You can test everything locally using **minikube** or **kind**, or in a cloud environment.
 
 ---
 
-### 🟩 **Task 7+: CI/CD Validation**
+## ✅ Final Deliverables:
 
-* Validate the full flow:
+* Forked GitHub repo with:
 
-  * Git commit → GitHub push → Jenkins trigger → Docker build & push → Kubernetes deploy
-
----
-
-## 📌 **Additional Notes**
-
-* Ensure:
-
-  * Jenkins has `Docker`, `kubectl`, `Git` installed
-  * Docker Hub credentials are stored securely in Jenkins
-  * Kubernetes cluster is accessible from Jenkins (via kubeconfig)
-* Use `nodePort: 30080` (as mentioned)
-* Check `docker ps`, `kubectl get pods`, `kubectl get svc` for debugging
+  * `Dockerfile`
+  * `deployment.yaml`
+  * `service.yaml`
+  * `Jenkinsfile`
+* Jenkins pipeline job linked with GitHub (webhook enabled).
+* Working Docker image pushed to Docker Hub.
+* Running Kubernetes deployment with NodePort access.
 
 ---
-
-
