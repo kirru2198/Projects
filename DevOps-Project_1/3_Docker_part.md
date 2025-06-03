@@ -106,6 +106,8 @@ sudo docker run -it -d -p 93:80 --name sc1 new_img
 
 This ensures that Jenkins will remove the old container and avoid port conflicts when deploying the new container.
 
+<img width="661" alt="image" src="https://github.com/user-attachments/assets/bbbe8670-b295-449e-a834-941e2076a51e" />
+
 ---
 
 ### 8. **Testing the Deployment**
