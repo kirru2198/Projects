@@ -206,7 +206,7 @@ To enable keyless SSH access, follow these steps:
 1. On the Master machine, generate an SSH key pair:
   
     ```bash
-    ssh-keygen
+    ssh-keygen -t rsa
     ```
     Press `Enter` to accept the default values until you reach the screen where the key pair is generated.
 
