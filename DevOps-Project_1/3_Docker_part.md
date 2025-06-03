@@ -41,7 +41,7 @@ ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 1. **Create a Webhook**: In GitHub, configure a webhook to notify Jenkins of changes to the repository.
    - Go to the repository settings and find the **Webhooks** section.
    - Add the Jenkins webhook URL and ensure that the payload is set to trigger on push events.
-   - Click **Add Webhook**.
+   - Click **Add Webhook**. (http://<jenkins-server>:8080/github-webhook/)
 
 ### Step 3: Configure Jenkins Job for Test Server
 
