@@ -232,7 +232,7 @@ Now, keyless access has been configured between your Ansible Master and Slave. Y
 From the Jenkins master, verify that SSH works to both slave machines using:
 
 ```bash
-ssh <slave_ip>
+ssh username@slave-prvate_ip
 ```
 and exit
 
