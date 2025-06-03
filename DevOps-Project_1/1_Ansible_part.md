@@ -333,13 +333,13 @@ Before executing the playbook, we need to ensure the commands are correct and th
 1. **Check Syntax:**
 
 ```bash
-ansible-playbook --syntax-check play.yaml
+ansible-playbook --syntax-check play.yml
 ```
 
 2. **Run the Playbook:**
 
 ```bash
-ansible-playbook -i /etc/ansible/hosts play.yaml
+ansible-playbook -i /etc/ansible/hosts play.yml
 ```
 
 ---
