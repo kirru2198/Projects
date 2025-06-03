@@ -254,8 +254,8 @@ sudo nano hosts
 - Add the private IPs of **Jenkins S1** and **Jenkins S2**:
 
 ```ini
-<jenkins-s1-ip>
-<jenkins-s2-ip>
+<jenkins-s1-private-ip>
+<jenkins-s2-private-ip>
 ```
 
 - Save and exit.
