@@ -12,7 +12,7 @@
 
 3. **Configuring Jenkins Node**:
    - Navigate to "Manage Jenkins" > "Nodes" to create a new node for the Kubernetes master machine.
-   - Name the node (e.g., "km") and configure the remote root directory (e.g., `/home/ubuntu`).
+   - Name the node (e.g., "km") and configure the remote root directory (e.g., `/home/ubuntu/jenkins`).
    - Set the launch method to SSH and provide the private IP of the Kubernetes master.
    - Add SSH credentials using the private key from the `.pem` file.
    - Save the configuration and verify that the node is launched successfully.
