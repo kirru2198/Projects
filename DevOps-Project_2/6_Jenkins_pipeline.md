@@ -48,6 +48,104 @@ ENTRYPOINT apachectl -D FOREGROUND
    - Save all changes in Jenkins and build the job to execute the pipeline.
    - Verify that the Docker image is pushed to Docker Hub and that the Kubernetes deployment is successful.
 
+---
+
+### `Jenkinsfile`
+
+```groovy
+pipeline {
+    agent none
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials("cb26ac19-f954-40ca-a12e-d790594bcca7")
+    }
+    stages {
+        stage('git') {
+            agent {
+                label "K8-Master"
+            }
+            steps {
+                script {
+                    git 'https://github.com/Sameer-8080/website.git'
+                }
+            }
+        }
+        stage('docker') {
+            agent {
+                label "K8-Master"
+            }
+            steps {
+                script {
+                    sh 'sudo docker build /home/ubuntu/jenkins/workspace/test-pipeline/ -t intellipaatsai/proj2'
+                    sh 'sudo docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}'
+                    sh 'sudo docker push intellipaatsai/proj2'
+                }
+            }
+        }
+        stage('kubernetes') {
+            agent {
+                label "K8-Master"
+            }
+            steps {
+                script {
+                    sh 'kubectl delete deploy nginx-deployment'
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl delete service my-service'
+                    sh 'kubectl apply -f service.yaml'
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+### `deployment.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    app: my-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-deployment
+  template:
+    metadata:
+      labels:
+        app: my-deployment
+    spec:
+      containers:
+      - name: my-deployment
+        image: aadi0410/project-2
+        ports:
+        - containerPort: 80
+```
+
+---
+
+### `service.yaml`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  selector:
+    app: my-deployment
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30008
+```
+---
+
 ### Key Commands in the Pipeline Script:
 - **Docker Build**: 
   ```bash
