@@ -51,6 +51,16 @@ ENTRYPOINT apachectl -D FOREGROUND
 
 ---
 
+### For getting Docker Hub Credentials id 
+
+- go to the Jenkins Dashboard
+- > Manage Jenkins > Credentials > Click on (global) > Click on Add Credentials
+  > Username = Usernmane of Dockerhub account
+  > Password = of Dockerhub account
+  > Click on Create
+
+- Copy the id of credentials and past that in Dockerhub Credentials part of Pipeline
+
 ### `Jenkinsfile`
 
 ```groovy
