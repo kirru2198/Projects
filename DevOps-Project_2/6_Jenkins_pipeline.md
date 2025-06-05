@@ -98,7 +98,9 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'kubectl delete deploy nginx-deployment'
                     sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl delete service my-service'
                     sh 'kubectl apply -f service.yaml'
                 }
             }
