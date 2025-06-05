@@ -17,6 +17,14 @@ Got it — you just shared a detailed walkthrough of your Kubernetes + Jenkins +
    * Ran `sudo apt update` on all three.
    * Installed Ansible on Jenkins M machine by creating and executing an install script.
 
+2.1 ** Install Ansible on Jenkins master/Terrafom machine
+
+```
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible
+```
 3. **SSH Setup:**
 
    * Generated SSH key pair (`ssh-keygen`) on Jenkins M.
