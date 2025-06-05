@@ -72,95 +72,184 @@ sudo apt install ansible
 
 ### Example Snippet of Your Ansible Playbook Structure (simplified):
 
-```yaml
+## 🛠️ Ansible Playbook: Jenkins Master and Kubernetes Setup
+
+This playbook performs the following tasks:
+
+1. Installs Java, Jenkins, and Docker on the Jenkins master (localhost).
+2. Installs Java and Kubernetes on the Kubernetes master node (`kmaster`).
+3. Installs Kubernetes on all Kubernetes slave nodes (`kslaves`).
+
+**Steps and Notes for Kubernetes Setup Using Ansible Playbook**
+
 ---
-- name: Install Java and Jenkins on Jenkins Master
-  hosts: localhost
-  become: true
-  tasks:
-    - name: Run install script for Java and Jenkins
-      script: ./localhost.sh
 
-- name: Install Java and Kubernetes on Kubernetes Master (also Jenkins slave)
-  hosts: km
-  become: true
-  tasks:
-    - name: Install Java
-      apt:
-        name: openjdk-11-jdk
-        state: present
-    - name: Install Kubernetes packages
-      shell: |
-        # your kubernetes install commands here
+# 🚀 Jenkins and Kubernetes Setup using Ansible & Shell Scripts
 
-- name: Install Kubernetes on Kubernetes Slaves
-  hosts: ks
-  become: true
-  tasks:
-    - name: Install Kubernetes packages
-      shell: |
-        # your kubernetes install commands here
+This project uses an Ansible playbook to automate the setup of:
+
+* Jenkins master on localhost
+* Kubernetes master on a node (`kmaster`)
+* Kubernetes workers on one or more slave nodes (`kslaves`)
+
+---
+
+## 📂 Directory Structure
+
+```
+project-root/
+├── playbook.yml
+├── localhost.sh
+├── km.sh
+└── ks.sh
 ```
 
 ---
 
-**Steps and Notes for Kubernetes Setup Using Ansible Playbook**
+## 🔧 Ansible Playbook
 
-1. **Copying Commands:**
+```yaml
+---
+- name: executing script on jenkins-master
+  hosts: localhost
+  become: true
+  tasks:
+    - name: installing java, jenkins, docker on J-M
+      script: localhost.sh
 
-   * First, copy the initial set of commands (up to just above the dotted lines) from the source file.
-   * Paste these commands into your `km.sh` script file.
-   * Save and exit the file.
+- name: executing script on k8s master
+  hosts: kmaster
+  become: true
+  tasks: 
+    - name: installing java and k8s
+      script: km.sh
 
-2. **Creating `ks.sh` Script:**
+- name: executing script on k8s slaves
+  hosts: kslaves
+  become: true
+  tasks: 
+    - name: installing k8s
+      script: ks.sh
+```
 
-   * Create a new file named `ks.sh`.
-   * This script will first update the machine (`sudo apt update`).
-   * Then paste the same set of commands you copied for the master node into `ks.sh`.
-   * This script will be used to install Kubernetes on the slave machines.
-   * Save and exit the file.
+---
 
-3. **Reviewing the Playbook:**
+## 🖥️ `localhost.sh` – Jenkins Master Setup
 
-   * Double-check the playbook to ensure all script filenames and hosts are correct (`localhost.sh`, `km.sh`, `ks.sh`).
-   * `localhost.sh` is for the Jenkins master machine where Java and Jenkins are installed.
-   * `km.sh` is for the Kubernetes master node.
-   * `ks.sh` is for Kubernetes slave nodes.
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk -y
 
-4. **Running the Playbook:**
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
 
-   * Run the Ansible playbook directly (no need to check syntax separately).
-   * The playbook will install Java and Jenkins on the Jenkins master machine.
-   * Then it will install Java and Kubernetes on the Kubernetes master and slave nodes.
-   * Installation may take some time, and the playbook might appear stuck—this is normal.
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" \
+  | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
-5. **If Playbook Gets Stuck:**
+sudo apt-get update
+sudo apt-get install fontconfig openjdk-17-jre -y
+sudo apt-get install jenkins -y
+```
 
-   * If it hangs for too long, press `Ctrl+C`.
-   * Run the playbook again.
-   * Sometimes internet connectivity issues cause delays.
+---
 
-6. **Important Notes:**
+## 🧠 `km.sh` – Kubernetes Master Node Setup
 
-   * Do **not** run Kubernetes commands you have from previous assignments as they may not be compatible with the Ansible playbook.
-   * A different, updated set of Kubernetes commands for the playbook will be shared later.
-   * Make sure the Jenkins installation commands include proper annotations (like `-y`) to avoid errors and skipped tasks.
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+sudo apt-get update
+sudo apt install apt-transport-https curl -y
 
-7. **Verifications:**
+# Install containerd
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-   * Check the Java version installed.
-   * Check Jenkins commands and annotations in the script.
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-8. **After Playbook Execution:**
+sudo apt-get update
+sudo apt-get install containerd.io -y
 
-   * You will see the status `changed=1` for all machines, indicating the playbook ran successfully.
-   * However, Kubernetes cluster setup is not complete yet.
-   * You need to copy and run the remaining commands (found just below the dotted lines in the source file) **only on the Kubernetes master node** to finalize the cluster setup.
+# Configure containerd
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+sudo systemctl restart containerd
 
-9. **Next Steps:**
+# Install Kubernetes
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-   * The updated complete Kubernetes commands will be shared after the session.
-   * Try running the full setup again later.
-   * If you face issues, raise a support ticket for one-on-one assistance.
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' \
+| sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo systemctl enable --now kubelet
+
+# Networking config
+sudo swapoff -a
+sudo modprobe br_netfilter
+sudo sysctl -w net.ipv4.ip_forward=1
+```
+
+---
+
+## 🧱 `ks.sh` – Kubernetes Worker Node Setup
+
+```bash
+sudo apt update
+sudo apt-get update
+sudo apt install apt-transport-https curl -y
+
+# Install containerd
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install containerd.io -y
+
+# Configure containerd
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+# Install Kubernetes
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' \
+| sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo systemctl enable --now kubelet
+
+# Networking config
+sudo swapoff -a
+sudo modprobe br_netfilter
+sudo sysctl -w net.ipv4.ip_forward=1
+```
+
+---
+
+## ✅ Next Steps
+
+* Run the Ansible playbook:
+
+  ```bash
+  ansible-playbook playbook.yml -i inventory
+  ```
+
+* Make sure to configure your `inventory` file with proper IPs or hostnames for `localhost`, `kmaster`, and `kslaves`.
 
 ---
