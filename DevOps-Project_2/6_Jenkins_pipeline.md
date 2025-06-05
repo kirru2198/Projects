@@ -31,6 +31,7 @@ ENTRYPOINT apachectl -D FOREGROUND
 ```
 
 5. **Pipeline Script Configuration**:
+   -  on the Dashboard select the Github hook trigger for GITScm Polling
    - In the Jenkins job configuration, write a pipeline script to define the build process.
    - Set the agent to `none` and define environment variables for Docker Hub credentials.
    - Create stages in the pipeline for:
@@ -39,12 +40,12 @@ ENTRYPOINT apachectl -D FOREGROUND
      - Logging into Docker Hub.
      - Pushing the Docker image to Docker Hub.
 
-6. **Deployment Configuration**:
+7. **Deployment Configuration**:
    - Create a `deployment.yaml` file in the GitHub repository for Kubernetes deployment.
    - Add the necessary deployment specifications in the YAML file.
    - Update the Jenkins pipeline script to apply the deployment and service YAML files using `kubectl apply -f`.
 
-7. **Final Steps**:
+8. **Final Steps**:
    - Save all changes in Jenkins and build the job to execute the pipeline.
    - Verify that the Docker image is pushed to Docker Hub and that the Kubernetes deployment is successful.
 
