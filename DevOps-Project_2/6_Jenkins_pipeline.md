@@ -86,9 +86,9 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'sudo docker build /home/ubuntu/jenkins/workspace/test-pipeline/ -t intellipaatsai/proj2'
+                    sh 'sudo docker build . -t aadi0410/project-2'
                     sh 'sudo docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}'
-                    sh 'sudo docker push intellipaatsai/proj2'
+                    sh 'sudo docker push aadi0410/project-2'
                 }
             }
         }
@@ -98,9 +98,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'kubectl delete deploy nginx-deployment'
                     sh 'kubectl apply -f deployment.yaml'
-                    sh 'kubectl delete service my-service'
                     sh 'kubectl apply -f service.yaml'
                 }
             }
