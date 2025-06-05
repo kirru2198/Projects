@@ -43,45 +43,84 @@ kubectl get nodes
 
 6. **Docker Installation (on all nodes):**
 
-   * Check for any held Kubernetes packages (`kubeadm`, `kubectl`, `kubelet`) with:
+# 🐳 Project 2 – Fixing `containerd.io` Conflicts While Installing Docker
 
-     ```
-     dpkg --get-selections | grep hold
-     ```
-   * Unhold these packages if needed:
+If you're facing errors related to `containerd.io` during Docker installation, it usually means there's a conflict with the default `containerd` package or there are held packages on your system.
 
-     ```
-     sudo apt-mark unhold <package-name>
-     ```
-   * Remove conflicting `containerd` packages if necessary:
-
-     ```
-     sudo apt remove --purge containerd
-     ```
-   * Update system and install `containerd.io` (the right version).
-   * Install `docker.io` afterward.
-   * Confirm Docker installation with:
-
-     ```
-     docker version
-     ```
-   * Repeat the Docker installation steps on all worker nodes.
-
-7. **Optional:**
-
-   * The `kubeadm reset` (preflight check) is not mandatory but recommended to avoid errors.
+Follow these steps to resolve the issue:
 
 ---
 
-### Additional Tips
+## ✅ Step-by-Step Solution
 
-* Run installation commands step-by-step instead of bulk copying.
-* Always check package hold status especially after kubeadm/kubelet installs.
-* Sharing your full setup scripts or documentation at the end of the session is a great idea for reproducibility.
-* After the break, you plan to cover deployment YAMLs and exposing services — looking forward to that!
+### 1️⃣ Check for Held Packages
+
+Held packages may block new installations or upgrades.
+
+```bash
+dpkg --get-selections | grep hold
+```
+
+If any held packages appear, unhold them:
+
+```bash
+sudo apt-mark unhold <package-name>
+```
 
 ---
 
-If you want, I can help you convert these notes into a clean step-by-step guide, script them in Bash, or prepare example Kubernetes deployment and service YAMLs next. Just let me know! Also, feel free to ask if you want to clarify any specific command or step.
+### 2️⃣ Remove Conflicting `containerd`
+
+The default `containerd` may conflict with `containerd.io`. Remove it first:
+
+```bash
+sudo apt-get remove --purge containerd
+```
 
 ---
+
+### 3️⃣ Clean Up and Update APT
+
+Clean leftover dependencies and update your package list:
+
+```bash
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get update
+```
+
+---
+
+### 4️⃣ Install `containerd.io`
+
+Now proceed with a clean installation:
+
+```bash
+sudo apt-get install containerd.io
+```
+
+---
+
+### 6️⃣ Install Docker Engine
+
+Once containerd is in place, install Docker:
+
+```bash
+sudo apt-get install docker-ce docker-ce-cli
+```
+
+> Make sure your Docker CE version is compatible with your system and `containerd.io`.
+
+---
+
+### 🔍 Bonus: Check Docker and Containerd Versions
+
+Verify installed versions to ensure compatibility:
+
+```bash
+docker --version
+containerd --version
+```
+
+---
+
