@@ -33,7 +33,7 @@
 * Verify installation:
 
   ```bash
-  terraform version
+  terraform --version
   ```
 
 ---
