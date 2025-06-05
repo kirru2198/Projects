@@ -1,23 +1,21 @@
-Thanks for sharing the detailed walkthrough! It looks like you're explaining how to set up a Kubernetes cluster from scratch, including initializing the master node, joining worker nodes, handling kubeadm preflight checks, and installing Docker properly on both master and worker nodes.
-
-Here’s a quick summary of the key points from your explanation, in case you want a concise reference or to share with others:
-
----
 
 ### Kubernetes Cluster Setup Summary
 
 1. **Initialize Kubernetes Master Node:**
 
-   * Run `kubeadm init` on the master node.
-   * Save the generated token and config files.
-   * Setup Kubernetes config directory (`~/.kube`).
-   * Copy the necessary config files to allow `kubectl` access.
+```
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
-2. **Install Network Plugin:**
+mkdir -p $HOME/ .kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/ .kube/config
+sudo chown $(id-u):$(id -g) $HOME/ .kube/config
 
-   * Apply the network plugin YAML (e.g., Calico, Flannel) on the master node using `kubectl apply -f <plugin-yaml>`.
+#Network plugin
+kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+```
 
-3. **Join Worker Nodes to Cluster:**
+
+4. **Join Worker Nodes to Cluster:**
 
    * On each worker node (slave nodes), run:
 
@@ -29,7 +27,7 @@ Here’s a quick summary of the key points from your explanation, in case you wa
        ```
    * Switch to root user if necessary before running these commands.
 
-4. **Verify Cluster Nodes:**
+5. **Verify Cluster Nodes:**
 
    * On master node, run:
 
@@ -38,7 +36,7 @@ Here’s a quick summary of the key points from your explanation, in case you wa
      ```
    * Confirm that all master and worker nodes show as `Ready`.
 
-5. **Docker Installation (on all nodes):**
+6. **Docker Installation (on all nodes):**
 
    * Check for any held Kubernetes packages (`kubeadm`, `kubectl`, `kubelet`) with:
 
@@ -64,7 +62,7 @@ Here’s a quick summary of the key points from your explanation, in case you wa
      ```
    * Repeat the Docker installation steps on all worker nodes.
 
-6. **Optional:**
+7. **Optional:**
 
    * The `kubeadm reset` (preflight check) is not mandatory but recommended to avoid errors.
 
