@@ -72,7 +72,7 @@ pipeline {
     stages {
         stage('git') {
             agent {
-                label "K8-Master"
+                label "km"
             }
             steps {
                 script {
@@ -82,7 +82,7 @@ pipeline {
         }
         stage('docker') {
             agent {
-                label "K8-Master"
+                label "km"
             }
             steps {
                 script {
@@ -94,7 +94,7 @@ pipeline {
         }
         stage('kubernetes') {
             agent {
-                label "K8-Master"
+                label "km"
             }
             steps {
                 script {
