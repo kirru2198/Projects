@@ -39,26 +39,7 @@ kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/
 kubectl get nodes
 ```
 
-4. **Join Worker Nodes to Cluster:**
-
-   * On each worker node (slave nodes), run:
-
-     * `kubeadm reset` to clear any previous setup.
-     * Join the cluster using the token generated on the master, something like:
-
-       ```
-       kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
-       ```
-   * Switch to root user if necessary before running these commands.
-
-5. **Verify Cluster Nodes:**
-
-   * On master node, run:
-
-     ```
-     kubectl get nodes
-     ```
-   * Confirm that all master and worker nodes show as `Ready`.
+---
 
 6. **Docker Installation (on all nodes):**
 
