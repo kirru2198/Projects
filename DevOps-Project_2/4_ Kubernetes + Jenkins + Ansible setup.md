@@ -40,6 +40,9 @@ sudo apt install ansible
      * `km` for Kubernetes master (will have Java + Kubernetes + Jenkins slave).
      * `ks` for Kubernetes slaves (will have Kubernetes only).
 
+  <img width="578" alt="image" src="https://github.com/user-attachments/assets/b66aa671-0bf3-4cf4-9fd2-fca69ef52953" />
+
+
 5. **Testing Connection:**
 
    * Ran `ansible -m ping all` to confirm Ansible can communicate with all machines via SSH.
