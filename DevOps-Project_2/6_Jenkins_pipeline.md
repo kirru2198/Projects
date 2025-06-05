@@ -22,6 +22,14 @@
    - Fork the GitHub repository for the project and set up a webhook to connect Jenkins with GitHub.
    - Create a `Dockerfile` in the repository with the necessary commands to build the application.
 
+```
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install apache2 -y
+ADD./var/www/html/
+ENTRYPOINT apachectl -D FOREGROUND
+```
+
 5. **Pipeline Script Configuration**:
    - In the Jenkins job configuration, write a pipeline script to define the build process.
    - Set the agent to `none` and define environment variables for Docker Hub credentials.
