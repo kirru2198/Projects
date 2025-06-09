@@ -219,8 +219,8 @@ sudo apt-get install jenkins -y
 # Update system
 sudo apt update
 
-# Install Java 17
-sudo apt install openjdk-17-jdk -y
+# Install Java 21
+sudo apt install openjdk-21-jdk -y
 
 # Install Docker
 sudo apt install docker.io -y
