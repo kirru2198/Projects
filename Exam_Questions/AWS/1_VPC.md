@@ -1,21 +1,36 @@
-1.Create two custom VPCs in the Oregon region:
-–> VPC-A (name: PRT-App-VPC)
-–> VPC-B (name: PRT-Data-VPC)
-2.Each VPC should have 1 Public and 1 Private subnet.
-3.Launch one Amazon Linux EC2 instance in the private subnet of each VPC:
-–> Name in VPC-A: App-Instance
-–> Name in VPC-B: Data-Instance
-4.Configure the Security Group of App-Instance that it can only communicate with Data-Instance.
-5.Configure a VPC Peering Connection between the two VPCs and update the route tables accordingly to enable communication between the private subnets.
-6. In VPC-B, create an S3 Gateway VPC Endpoint and ensure the Data-Instance can access S3 without using the internet.
-Screenshots required:
-1.Screenshot(s) of both VPC Resource Maps
-2.Screenshot(s) of Instance Summary for App-Instance and Data-Instance
-3.Screenshot(s) of the VPC Peering Connection (status and routing)
-4.Screenshot(s) of the VPC Endpoint Configuration and its associated route table
-5.Screenshot(s) of the App-Instance able to communicate from Data-Instance only.
-6.Screenshot(s) showing S3 access from Data-Instance
-7.Screenshot(s) of Security Group rules for both instances
+## 1. Create Two Custom VPCs in the Oregon Region
+- **VPC-A** (name: PRT-App-VPC)
+- **VPC-B** (name: PRT-Data-VPC)
+
+## 2. Subnets Configuration
+- Each VPC should have:
+  - 1 Public Subnet
+  - 1 Private Subnet
+
+## 3. Launch EC2 Instances
+- Launch one Amazon Linux EC2 instance in the private subnet of each VPC:
+  - **Name in VPC-A**: App-Instance
+  - **Name in VPC-B**: Data-Instance
+
+## 4. Configure Security Group for App-Instance
+- Configure the Security Group of App-Instance to allow communication only with Data-Instance.
+
+## 5. VPC Peering Connection
+- Configure a VPC Peering Connection between the two VPCs.
+- Update the route tables accordingly to enable communication between the private subnets.
+
+## 6. Create S3 Gateway VPC Endpoint
+- In VPC-B, create an S3 Gateway VPC Endpoint.
+- Ensure that Data-Instance can access S3 without using the internet.
+
+## Screenshots Required
+1. Screenshot(s) of both VPC Resource Maps
+2. Screenshot(s) of Instance Summary for App-Instance and Data-Instance
+3. Screenshot(s) of the VPC Peering Connection (status and routing)
+4. Screenshot(s) of the VPC Endpoint Configuration and its associated route table
+5. Screenshot(s) of the App-Instance able to communicate from Data-Instance only
+6. Screenshot(s) showing S3 access from Data-Instance
+7. Screenshot(s) of Security Group rules for both instances
 
 ---
 
